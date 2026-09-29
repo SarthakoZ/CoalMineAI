@@ -17,9 +17,6 @@ log = logging.getLogger("coalmineai")
 st.set_page_config(page_title="CoalMineAI Command Center", page_icon="⛏️",
                    layout="wide", initial_sidebar_state="expanded")
 
-# ---------------------------------------------------------------- config
-# Override with environment variables; defaults are relative to this file
-# (no hard-coded D:\ paths).
 BASE_DIR = Path(os.getenv("COALMINEAI_HOME", Path(__file__).resolve().parent))
 MODEL_PATH = Path(os.getenv("COALMINEAI_MODEL", BASE_DIR / "model" / "mineshield_compliance_model.pkl"))
 IMAGES = {
@@ -41,7 +38,6 @@ INSPECTION_COLUMNS = ["mine_id", "inspection_date", "inspection_time"] + FEATURE
 
 RISK_COLORS = {"LOW": "#45e8bc", "MEDIUM": "#ffd166", "HIGH": "#ff6678"}
 
-# ---------------------------------------------------------------- styling
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
@@ -97,7 +93,6 @@ hr { border-color:#1c2933 !important; }
 """, unsafe_allow_html=True)
 
 
-# ---------------------------------------------------------------- helpers
 def esc(value) -> str:
     """HTML-escape anything that goes into unsafe_allow_html markup."""
     return html.escape(str(value))
@@ -350,7 +345,7 @@ def page_data_entry():
         return
     mine_options = dict(zip(mine_df["mine_name"], mine_df["mine_id"]))
 
-    try:  # fail early and clearly if the model can't be loaded
+    try:  
         load_model()
     except Exception as exc:
         log.exception("Model load failed")
@@ -358,7 +353,7 @@ def page_data_entry():
         return
 
     yes_no = lambda a, b: (lambda x: a if x == 0 else b)
-    # st.form: no rerun per keystroke, and the submit button can't be double-fired mid-run.
+  
     with st.form("inspection_form", clear_on_submit=False):
         selected_mine = st.selectbox("Mine", list(mine_options.keys()))
         c1, c2 = st.columns(2)
@@ -409,7 +404,7 @@ def page_data_entry():
 
     with st.spinner("Running CoalMineAI risk analysis..."):
         try:
-            prediction, probability = predict_risk(data)  # 1) predict first, nothing written yet
+            prediction, probability = predict_risk(data)  
         except Exception:
             log.exception("Prediction failed")
             st.error("The model could not score this inspection (e.g. an unrecognised location value). "
