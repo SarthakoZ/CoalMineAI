@@ -6,7 +6,9 @@ CoalMineAI is a software-based AI platform designed to centralize coal mine insp
 
 The platform combines **Python, PostgreSQL, Scikit-learn, Random Forest, Pandas, Joblib, and Streamlit**.
 
----
+## 🚀 Live Demo
+
+[CoalMineAI Live Demo](https://coalmineai-4acz5g5zld5k5sz9ubnkia.streamlit.app/)
 
 ## 🚀 Overview
 
